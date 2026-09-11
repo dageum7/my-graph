@@ -220,3 +220,13 @@ five = df[df["영화명"].isin(top5)].sort_values("날짜")
 fig2 = px.line(five, x="날짜", y="일관객", color="영화명", markers=True)
 st.plotly_chart(fig2, width="stretch")
 st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")
+# ── 그래프 3. 극장가 전체의 흐름과 봉우리 ─────────────────────
+st.header("3. 날짜별 10위권 관객 합계")
+daily = df.groupby("날짜", as_index=False)["일관객"].sum()
+peak3 = daily.nlargest(3, "일관객")
+fig3 = px.area(daily, x="날짜", y="일관객")
+fig3.add_scatter(x=peak3["날짜"], y=peak3["일관객"], mode="markers+text",
+                 text=peak3["날짜"].dt.strftime("%Y-%m-%d"), textposition="top center",
+                 marker=dict(size=10, color="crimson"), name="가장 붐빈 3일")
+st.plotly_chart(fig3, width="stretch")
+st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")
